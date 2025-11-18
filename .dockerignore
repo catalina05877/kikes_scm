@@ -1,0 +1,28 @@
+# Archivos de Git
+.git
+.gitignore
+
+# Archivos de configuración sensibles
+.env
+
+# Dependencias de Composer
+vendor/
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
