@@ -197,6 +197,8 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
                             <td>$<?php echo number_format($venta['total'], 0, ',', '.'); ?></td>
                             <td class="actions">
                                 <a href="ver_venta.php?id=<?php echo $venta['id']; ?>" class="btn">Ver Detalle</a>
+                                <a href="editar_venta.php?id=<?php echo $venta['id']; ?>" class="btn">Editar</a>
+                                <a href="eliminar_venta.php?id=<?php echo $venta['id']; ?>" class="btn" onclick="return confirm('¿Estás seguro de que deseas eliminar esta venta?')">Eliminar</a>
                                 <a href="generar_pdf.php?id=<?php echo $venta['id']; ?>" class="btn" target="_blank">Factura PDF</a>
                             </td>
                         </tr>

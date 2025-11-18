@@ -5,8 +5,15 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 
-// Cargar .env solo si existe
-if (file_exists(__DIR__ . '/../.env')) {
+// Detectar entorno: si existe .env.local lo carga, si no usa .env.production
+if (file_exists(__DIR__ . '/../.env.local')) {
+    $dotenv = Dotenv::createImmutable(__DIR__ . '/../', '.env.local');
+    $dotenv->load();
+} elseif (file_exists(__DIR__ . '/../.env.production')) {
+    $dotenv = Dotenv::createImmutable(__DIR__ . '/../', '.env.production');
+    $dotenv->load();
+} elseif (file_exists(__DIR__ . '/../.env')) {
+    // fallback por si solo tienes un .env
     $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
     $dotenv->load();
 }
@@ -27,7 +34,7 @@ $SENDGRID_FROM_NAME  = $_ENV['SENDGRID_FROM_NAME'] ?? '';
 function conectarDB() {
     global $DB_HOST, $DB_NAME, $DB_USER, $DB_PASS;
 
-    // Forzar 127.0.0.1 si se usa localhost (evita error HY000 [2002])
+    // Forzar 127.0.0.1 si se usa localhost
     if ($DB_HOST === 'localhost') {
         $DB_HOST = '127.0.0.1';
     }
