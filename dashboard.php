@@ -77,7 +77,7 @@ try {
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #FFF8DC, #F5F5DC);
+            background: linear-gradient(135deg, #98c3eeff, #adbdf3ff);
             margin: 0;
             padding: 0;
             color: #333;
@@ -97,7 +97,8 @@ try {
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             position: fixed;
             height: 100vh;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .sidebar h2 {
@@ -144,10 +145,8 @@ try {
         }
 
         .sidebar .logout {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
+            margin-top: auto;
+            margin-bottom: 20px;
         }
 
         .sidebar .logout a {
@@ -177,13 +176,13 @@ try {
             text-align: center;
             margin-bottom: 40px;
             padding: 20px;
-            background-color: #FFF8DC;
+            background-color: #34495E;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .header h1 {
-            color: #D2B48C;
+            color: #ffffffff;
             font-size: 2.5em;
             margin-bottom: 10px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
@@ -208,7 +207,7 @@ try {
 
         .stat-card {
             background-color: #FFFFFF;
-            border: 1px solid #FFD700;
+            border: 1px solid #9491edff;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
@@ -350,7 +349,7 @@ try {
             </div>
             <nav>
                 <ul>
-                    <li><a href="#dashboard">Dashboard</a></li>
+                    
                     <li><a href="modulos/proveedores/index.php">Proveedores</a></li>
                     <li><a href="modulos/clientes/index.php">Clientes</a></li>
                     <li><a href="modulos/inventarios/index.php">Inventarios</a></li>
