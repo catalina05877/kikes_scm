@@ -143,51 +143,120 @@ $rol_usuario = $_SESSION['usuario_rol'] ?? 'N/A';
             margin-bottom: 0;
         }
 
-        .modules {
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }
 
-        .module-card {
+        .stat-card {
             background-color: #FFFFFF;
             border: 1px solid #FFD700;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .module-card:hover {
+        .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .module-card h3 {
+        .stat-card h3 {
             color: #D2B48C;
             margin-top: 0;
-            font-size: 1.4em;
+            font-size: 1.2em;
+            margin-bottom: 10px;
         }
 
-        .module-card p {
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #FFD700;
+            margin: 10px 0;
+        }
+
+        .stat-card p {
             color: #666;
-            margin-bottom: 15px;
+            margin: 0;
+            font-size: 0.9em;
         }
 
-        .module-card a {
-            display: inline-block;
+        .quick-actions {
+            margin-bottom: 40px;
+        }
+
+        .quick-actions h2 {
+            color: #D2B48C;
+            margin-bottom: 20px;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
             background-color: #FFD700;
             color: #333;
-            padding: 10px 15px;
+            padding: 15px;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-weight: bold;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .module-card a:hover {
+        .action-btn:hover {
             background-color: #FFC107;
+            transform: translateY(-2px);
+        }
+
+        .action-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .recent-activity h2 {
+            color: #D2B48C;
+            margin-bottom: 20px;
+        }
+
+        .activity-list {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #EEE;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            color: #666;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .activity-desc {
+            color: #333;
+            flex: 1;
+            margin-left: 15px;
         }
 
         /* Responsivo */
@@ -246,42 +315,70 @@ $rol_usuario = $_SESSION['usuario_rol'] ?? 'N/A';
                 <h2>Sistema de Gestión Huevos Kikes</h2>
             </div>
 
-            <h2>Módulos del Sistema:</h2>
-            <div class="modules">
-                <div class="module-card">
-                    <h3>📋 Gestión de Proveedores</h3>
-                    <p>Registro, edición, y manejo de la documentación (RUT, Cámara y Comercio) de los proveedores.</p>
-                    <a href="modulos/proveedores/index.php">Ir a Gestión de Proveedores</a>
+            <!-- Dashboard Content -->
+            <div class="dashboard-overview">
+                <h2>📊 Resumen del Sistema</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>📦 Inventario Total</h3>
+                        <p class="stat-number">--</p>
+                        <p>Unidades disponibles</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>💰 Ventas del Día</h3>
+                        <p class="stat-number">$--</p>
+                        <p>Ingresos hoy</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>🛒 Compras Pendientes</h3>
+                        <p class="stat-number">--</p>
+                        <p>Órdenes activas</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>👥 Clientes Activos</h3>
+                        <p class="stat-number">--</p>
+                        <p>Registrados</p>
+                    </div>
                 </div>
 
-                <div class="module-card">
-                    <h3>👥 Gestión de Clientes</h3>
-                    <p>Registro, edición y eliminación de clientes con selección de ubicación mediante Google Maps.</p>
-                    <a href="modulos/clientes/index.php">Ir a Gestión de Clientes</a>
+                <div class="quick-actions">
+                    <h2>⚡ Acciones Rápidas</h2>
+                    <div class="actions-grid">
+                        <a href="modulos/ventas/formulario.php" class="action-btn">
+                            <span class="action-icon">💰</span>
+                            <span>Nueva Venta</span>
+                        </a>
+                        <a href="modulos/compras/formulario.php" class="action-btn">
+                            <span class="action-icon">🛒</span>
+                            <span>Nueva Compra</span>
+                        </a>
+                        <a href="modulos/inventarios/formulario.php" class="action-btn">
+                            <span class="action-icon">📦</span>
+                            <span>Actualizar Inventario</span>
+                        </a>
+                        <a href="modulos/caja/index.php" class="action-btn">
+                            <span class="action-icon">💵</span>
+                            <span>Ver Saldo</span>
+                        </a>
+                    </div>
                 </div>
 
-                <div class="module-card">
-                    <h3>📦 Gestión de Inventarios</h3>
-                    <p>Control de entradas y salidas de huevos, gestión de stock por tipo y generación de reportes.</p>
-                    <a href="modulos/inventarios/index.php">Ir a Gestión de Inventarios</a>
-                </div>
-
-                <div class="module-card">
-                    <h3>💰 Ventas</h3>
-                    <p>Realizar ventas de huevos a clientes registrados, generar facturas PDF y controlar el saldo en caja.</p>
-                    <a href="modulos/ventas/index.php">Ir a Ventas</a>
-                </div>
-
-                <div class="module-card">
-                    <h3>🛒 Compras</h3>
-                    <p>Realizar compras de huevos a proveedores registrados, generar facturas de compra PDF y controlar el saldo en caja.</p>
-                    <a href="modulos/compras/index.php">Ir a Compras</a>
-                </div>
-
-                <div class="module-card">
-                    <h3>💵 Saldo en Caja</h3>
-                    <p>Visualizar el saldo actual en caja, ingresos por ventas y egresos por compras con historial de movimientos.</p>
-                    <a href="modulos/caja/index.php">Ir a Saldo en Caja</a>
+                <div class="recent-activity">
+                    <h2>📋 Actividad Reciente</h2>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <span class="activity-time">Hace 5 min</span>
+                            <span class="activity-desc">Nueva venta registrada - $150.00</span>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-time">Hace 12 min</span>
+                            <span class="activity-desc">Compra de huevos procesada</span>
+                        </div>
+                        <div class="activity-item">
+                            <span class="activity-time">Hace 1 hora</span>
+                            <span class="activity-desc">Cliente registrado: Juan Pérez</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
