@@ -10,17 +10,14 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Habilitar mod_rewrite para Apache (útil para URLs amigables)
 RUN a2enmod rewrite
 
-# Copiar archivos de configuración primero
-COPY composer.json composer.lock /var/www/html/
-
-# Instalar dependencias de PHP
-RUN cd /var/www/html && composer install --no-dev --optimize-autoloader
-
 # Copiar el resto de los archivos del proyecto
 COPY . /var/www/html/
 
 # Cambiar permisos para que Apache pueda acceder
 RUN chown -R www-data:www-data /var/www/html/
+
+# Instalar dependencias de PHP después de copiar los archivos
+RUN cd /var/www/html && composer install --no-dev --optimize-autoloader
 
 # Exponer el puerto 80
 EXPOSE 80
