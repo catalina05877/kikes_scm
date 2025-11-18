@@ -1,0 +1,39 @@
+# Archivos de configuración sensibles
+.env
+
+# Dependencias de Composer
+vendor/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Backups
+*.bak
+*.backup
+
+# IDE
+.vscode/
+.idea/
+
+# Archivos de XAMPP
+/xampp/
+
+# Archivos de Windows
+desktop.ini
+
+# Archivos de uploads (si contienen datos sensibles)
+# uploads/  # Descomenta si quieres excluir uploads
+
+# Base de datos local
+*.sql
+*.sqlite
+*.db
