@@ -23,46 +23,101 @@ $rol_usuario = $_SESSION['usuario_rol'] ?? 'N/A';
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #FFF8DC, #F5F5DC);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             color: #333;
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: #FFFFFF;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            animation: fadeIn 1s ease-in-out;
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .sidebar {
+            width: 250px;
+            background-color: #2C3E50;
+            color: #ECF0F1;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
         }
 
-        h1 {
-            color: #D2B48C;
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        h1::before {
-            content: "🥚 ";
-        }
-
-        h2 {
+        .sidebar h2 {
             color: #FFD700;
             text-align: center;
-            font-size: 1.8em;
             margin-bottom: 30px;
+            font-size: 1.5em;
         }
 
-        .welcome-info {
+        .sidebar .user-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #34495E;
+            border-radius: 8px;
+        }
+
+        .sidebar .user-info p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar nav ul li a {
+            color: #ECF0F1;
+            text-decoration: none;
+            display: block;
+            padding: 12px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .sidebar nav ul li a:hover {
+            background-color: #FFD700;
+            color: #2C3E50;
+        }
+
+        .sidebar .logout {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+        }
+
+        .sidebar .logout a {
+            color: #E74C3C;
+            text-decoration: none;
+            display: block;
+            padding: 12px 15px;
+            border-radius: 5px;
+            text-align: center;
+            background-color: #C0392B;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar .logout a:hover {
+            background-color: #A93226;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 40px;
+            background-color: #FFFFFF;
+            min-height: 100vh;
+        }
+
+        .header {
             text-align: center;
             margin-bottom: 40px;
             padding: 20px;
@@ -71,9 +126,21 @@ $rol_usuario = $_SESSION['usuario_rol'] ?? 'N/A';
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
-        .welcome-info p {
-            font-size: 1.1em;
-            margin: 0;
+        .header h1 {
+            color: #D2B48C;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1::before {
+            content: "🥚 ";
+        }
+
+        .header h2 {
+            color: #FFD700;
+            font-size: 1.8em;
+            margin-bottom: 0;
         }
 
         .modules {
@@ -123,32 +190,21 @@ $rol_usuario = $_SESSION['usuario_rol'] ?? 'N/A';
             background-color: #FFC107;
         }
 
-        .logout {
-            text-align: right;
-        }
-
-        .logout a {
-            color: #D2B48C;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-
-        .logout a:hover {
-            color: #B8860B;
-        }
-
         /* Responsivo */
         @media (max-width: 768px) {
-            .container {
-                padding: 20px;
+            .sidebar {
+                width: 200px;
             }
 
-            h1 {
+            .main-content {
+                margin-left: 200px;
+            }
+
+            .header h1 {
                 font-size: 2em;
             }
 
-            h2 {
+            .header h2 {
                 font-size: 1.5em;
             }
 
@@ -159,56 +215,75 @@ $rol_usuario = $_SESSION['usuario_rol'] ?? 'N/A';
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>¡Bienvenido, <?php echo htmlspecialchars($nombre_usuario); ?>!</h1>
-        <h2>Sistema de Gestión Huevos kikes</h2>
-
-        <div class="welcome-info">
-            <p>Has iniciado sesión con el rol de: <b><?php echo htmlspecialchars($rol_usuario); ?></b></p>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>🥚 KIKES SCM</h2>
+            <div class="user-info">
+                <p><strong><?php echo htmlspecialchars($nombre_usuario); ?></strong></p>
+                <p>Rol: <?php echo htmlspecialchars($rol_usuario); ?></p>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="modulos/proveedores/index.php">Proveedores</a></li>
+                    <li><a href="modulos/clientes/index.php">Clientes</a></li>
+                    <li><a href="modulos/inventarios/index.php">Inventarios</a></li>
+                    <li><a href="modulos/ventas/index.php">Ventas</a></li>
+                    <li><a href="modulos/compras/index.php">Compras</a></li>
+                    <li><a href="modulos/caja/index.php">Saldo en Caja</a></li>
+                </ul>
+            </nav>
+            <div class="logout">
+                <a href="logout.php">Cerrar Sesión</a>
+            </div>
         </div>
 
-        <h2>Módulos del Sistema:</h2>
-        <div class="modules">
-            <div class="module-card">
-                <h3>Módulo Gestión de proveedores</h3>
-                <p>Registro, edición, y manejo de la documentación (RUT, Cámara y Comercio) de los proveedores.</p>
-                <a href="modulos/proveedores/index.php">Ir a Gestión de Proveedores</a>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>¡Bienvenido!</h1>
+                <h2>Sistema de Gestión Huevos Kikes</h2>
             </div>
 
-            <div class="module-card">
-                <h3>Módulo Gestión de Clientes</h3>
-                <p>Registro, edición y eliminación de clientes con selección de ubicación mediante Google Maps.</p>
-                <a href="modulos/clientes/index.php">Ir a Gestión de Clientes</a>
+            <h2>Módulos del Sistema:</h2>
+            <div class="modules">
+                <div class="module-card">
+                    <h3>📋 Gestión de Proveedores</h3>
+                    <p>Registro, edición, y manejo de la documentación (RUT, Cámara y Comercio) de los proveedores.</p>
+                    <a href="modulos/proveedores/index.php">Ir a Gestión de Proveedores</a>
+                </div>
+
+                <div class="module-card">
+                    <h3>👥 Gestión de Clientes</h3>
+                    <p>Registro, edición y eliminación de clientes con selección de ubicación mediante Google Maps.</p>
+                    <a href="modulos/clientes/index.php">Ir a Gestión de Clientes</a>
+                </div>
+
+                <div class="module-card">
+                    <h3>📦 Gestión de Inventarios</h3>
+                    <p>Control de entradas y salidas de huevos, gestión de stock por tipo y generación de reportes.</p>
+                    <a href="modulos/inventarios/index.php">Ir a Gestión de Inventarios</a>
+                </div>
+
+                <div class="module-card">
+                    <h3>💰 Ventas</h3>
+                    <p>Realizar ventas de huevos a clientes registrados, generar facturas PDF y controlar el saldo en caja.</p>
+                    <a href="modulos/ventas/index.php">Ir a Ventas</a>
+                </div>
+
+                <div class="module-card">
+                    <h3>🛒 Compras</h3>
+                    <p>Realizar compras de huevos a proveedores registrados, generar facturas de compra PDF y controlar el saldo en caja.</p>
+                    <a href="modulos/compras/index.php">Ir a Compras</a>
+                </div>
+
+                <div class="module-card">
+                    <h3>💵 Saldo en Caja</h3>
+                    <p>Visualizar el saldo actual en caja, ingresos por ventas y egresos por compras con historial de movimientos.</p>
+                    <a href="modulos/caja/index.php">Ir a Saldo en Caja</a>
+                </div>
             </div>
-
-            <div class="module-card">
-    <h3>Módulo Gestión de Inventarios</h3>
-    <p>Control de entradas y salidas de huevos, gestión de stock por tipo y generación de reportes.</p>
-    <a href="modulos/inventarios/index.php">Ir a Gestión de Inventarios</a>
-</div>
-
-            <div class="module-card">
-                <h3>Módulo de Ventas</h3>
-                <p>Realizar ventas de huevos a clientes registrados, generar facturas PDF y controlar el saldo en caja.</p>
-                <a href="modulos/ventas/index.php">Ir a Ventas</a>
-            </div>
-
-            <div class="module-card">
-                <h3>Módulo de Compras</h3>
-                <p>Realizar compras de huevos a proveedores registrados, generar facturas de compra PDF y controlar el saldo en caja.</p>
-                <a href="modulos/compras/index.php">Ir a Compras</a>
-            </div>
-
-            <div class="module-card">
-                <h3>Módulo Saldo en Caja</h3>
-                <p>Visualizar el saldo actual en caja, ingresos por ventas y egresos por compras con historial de movimientos.</p>
-                <a href="modulos/caja/index.php">Ir a Saldo en Caja</a>
-            </div>
-
-        </div>
-
-        <div class="logout">
-            <a href="logout.php">Cerrar Sesión</a>
         </div>
     </div>
 </body>
