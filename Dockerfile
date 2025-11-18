@@ -14,7 +14,7 @@ RUN a2enmod rewrite
 COPY composer.json composer.lock /var/www/html/
 
 # Instalar dependencias de PHP
-RUN cd /var/www/html && composer install --no-dev --optimize-autoloader
+RUN cd /var/www/html && composer install --no-dev --optimize-autoloader --no-interaction
 
 # Copiar el resto de los archivos del proyecto
 COPY . /var/www/html/
