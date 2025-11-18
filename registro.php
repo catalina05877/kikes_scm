@@ -6,11 +6,11 @@ require 'config/db.php';
 $mensaje = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
+    // Sanitización compatible con PHP 8.1+
+    $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_SPECIAL_CHARS);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'] ?? '';
-    // Asignamos 'Vendedor' por defecto, ya que 'Administrador' debe ser reservado.
-    $rol = 'Vendedor'; 
+    $rol = 'Vendedor'; // Asignamos 'Vendedor' por defecto
 
     if (strlen($password) < 6) {
         $mensaje = "ERROR: La contraseña debe tener al menos 6 caracteres.";
@@ -85,14 +85,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-bottom: 20px;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .register-container h1::before {
-            content: " ";
-        }
-
-        .register-container h1::after {
-            content: " ";
         }
 
         form {
