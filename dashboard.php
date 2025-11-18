@@ -11,6 +11,62 @@ if (!isset($_SESSION['usuario_id'])) {
 // Obtener datos de sesión
 $nombre_usuario = $_SESSION['usuario_nombre'] ?? 'Usuario';
 $rol_usuario = $_SESSION['usuario_rol'] ?? 'N/A';
+
+// Conectar a la base de datos
+require 'config/db.php';
+$pdo = conectarDB();
+
+// Obtener estadísticas en tiempo real
+try {
+    // Inventario total (suma de todas las cubetas disponibles)
+    $inventario_total = $pdo->query("
+        SELECT SUM(
+            CASE WHEN tipo_movimiento = 'entrada' THEN cantidad_cubetas ELSE -cantidad_cubetas END
+        ) as total_cubetas
+        FROM inventarios
+    ")->fetchColumn() ?: 0;
+
+    // Ventas del día (suma de totales de ventas de hoy)
+    $ventas_dia = $pdo->query("
+        SELECT COALESCE(SUM(total), 0) as total_ventas
+        FROM ventas
+        WHERE DATE(fecha_venta) = CURDATE()
+    ")->fetchColumn() ?: 0;
+
+    // Compras pendientes (compras que no han sido pagadas completamente)
+    $compras_pendientes = $pdo->query("
+        SELECT COUNT(*) as pendientes
+        FROM compras
+        WHERE estado = 'pendiente'
+    ")->fetchColumn() ?: 0;
+
+    // Clientes activos (total de clientes registrados)
+    $clientes_activos = $pdo->query("
+        SELECT COUNT(*) as total_clientes
+        FROM clientes
+    ")->fetchColumn() ?: 0;
+
+    // Actividad reciente (últimas 3 operaciones)
+    $actividad_reciente = $pdo->query("
+        (SELECT 'venta' as tipo, fecha_venta as fecha, CONCAT('Venta registrada - $', total) as descripcion
+         FROM ventas ORDER BY fecha_venta DESC LIMIT 3)
+        UNION ALL
+        (SELECT 'compra' as tipo, fecha_compra as fecha, CONCAT('Compra procesada - $', total) as descripcion
+         FROM compras ORDER BY fecha_compra DESC LIMIT 3)
+        UNION ALL
+        (SELECT 'cliente' as tipo, fecha_registro as fecha, CONCAT('Cliente registrado: ', nombre) as descripcion
+         FROM clientes ORDER BY fecha_registro DESC LIMIT 3)
+        ORDER BY fecha DESC LIMIT 3
+    ")->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (Exception $e) {
+    // En caso de error, usar valores por defecto
+    $inventario_total = 0;
+    $ventas_dia = 0;
+    $compras_pendientes = 0;
+    $clientes_activos = 0;
+    $actividad_reciente = [];
+}
 ?>
 
 <!DOCTYPE html>
@@ -321,22 +377,22 @@ $rol_usuario = $_SESSION['usuario_rol'] ?? 'N/A';
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h3>📦 Inventario Total</h3>
-                        <p class="stat-number">--</p>
-                        <p>Unidades disponibles</p>
+                        <p class="stat-number"><?php echo number_format($inventario_total); ?></p>
+                        <p>Cubetas disponibles</p>
                     </div>
                     <div class="stat-card">
                         <h3>💰 Ventas del Día</h3>
-                        <p class="stat-number">$--</p>
+                        <p class="stat-number">$<?php echo number_format($ventas_dia, 0, ',', '.'); ?></p>
                         <p>Ingresos hoy</p>
                     </div>
                     <div class="stat-card">
                         <h3>🛒 Compras Pendientes</h3>
-                        <p class="stat-number">--</p>
+                        <p class="stat-number"><?php echo number_format($compras_pendientes); ?></p>
                         <p>Órdenes activas</p>
                     </div>
                     <div class="stat-card">
                         <h3>👥 Clientes Activos</h3>
-                        <p class="stat-number">--</p>
+                        <p class="stat-number"><?php echo number_format($clientes_activos); ?></p>
                         <p>Registrados</p>
                     </div>
                 </div>
@@ -366,18 +422,19 @@ $rol_usuario = $_SESSION['usuario_rol'] ?? 'N/A';
                 <div class="recent-activity">
                     <h2>📋 Actividad Reciente</h2>
                     <div class="activity-list">
-                        <div class="activity-item">
-                            <span class="activity-time">Hace 5 min</span>
-                            <span class="activity-desc">Nueva venta registrada - $150.00</span>
-                        </div>
-                        <div class="activity-item">
-                            <span class="activity-time">Hace 12 min</span>
-                            <span class="activity-desc">Compra de huevos procesada</span>
-                        </div>
-                        <div class="activity-item">
-                            <span class="activity-time">Hace 1 hora</span>
-                            <span class="activity-desc">Cliente registrado: Juan Pérez</span>
-                        </div>
+                        <?php if (empty($actividad_reciente)): ?>
+                            <div class="activity-item">
+                                <span class="activity-time">Sin actividad</span>
+                                <span class="activity-desc">No hay actividad reciente registrada</span>
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($actividad_reciente as $actividad): ?>
+                                <div class="activity-item">
+                                    <span class="activity-time"><?php echo htmlspecialchars(date('d/m H:i', strtotime($actividad['fecha']))); ?></span>
+                                    <span class="activity-desc"><?php echo htmlspecialchars($actividad['descripcion']); ?></span>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
